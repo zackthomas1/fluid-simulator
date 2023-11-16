@@ -5,7 +5,7 @@
 
 //
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
+void processInput(GLFWwindow* window);
 
 // settings
 const unsigned int SCR_WIDTH = 800; 
@@ -13,7 +13,6 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main(int argc, char** argv)
 {
-	
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit(); 
@@ -24,7 +23,7 @@ int main(int argc, char** argv)
 
 	// create window object
 	// --------------------
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "FluidSim", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl; 
@@ -41,7 +40,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	glViewport(0, 0, 800, 600); 
+	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
@@ -49,7 +48,15 @@ int main(int argc, char** argv)
 	// -----------
 	while (!glfwWindowShouldClose(window))
 	{
+		// input
+		processInput(window);
+
+		// rendering commands here
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);	// state-setting
+		glClear(GL_COLOR_BUFFER_BIT);			// state-using
+
 		// glfw: swap buffers and poll IO events (key pressed/released, mouse moved)
+		// check and call events and swap the buffers
 		glfwSwapBuffers(window); 
 		glfwPollEvents();
 	}
@@ -63,4 +70,11 @@ int main(int argc, char** argv)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window, true);
+	}
 }
